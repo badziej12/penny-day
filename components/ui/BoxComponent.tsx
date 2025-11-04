@@ -3,16 +3,18 @@ import { View } from "react-native";
 
 type BoxComponentProps = {
   children: ReactNode;
-  customClassName?: string;
+  paddingClass?: string;
+  bgClass?: string;
 };
 
-const BoxComponent: FC<BoxComponentProps> = ({ children, customClassName }) => {
+const BoxComponent: FC<BoxComponentProps> = ({
+  children,
+  bgClass = "bg-white dark:bg-white/[0.03]",
+  paddingClass = "p-5",
+}) => {
   return (
     <View
-      className={
-        customClassName ??
-        "rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]"
-      }
+      className={`rounded-2xl border overflow-hidden border-gray-200 ${paddingClass} ${bgClass} dark:border-gray-800`}
     >
       {children}
     </View>
