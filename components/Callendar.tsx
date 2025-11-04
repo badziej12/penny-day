@@ -1,13 +1,13 @@
-import { getCalendarDays, shouldChangeYear } from "@/utils/utils";
-import { useState } from "react";
+import { getCalendarDays } from "@/utils/utils";
+import { FC } from "react";
 import { Pressable, Text, View } from "react-native";
 import ArrowImage from "./ui/ArrowImage";
 import BoxComponent from "./ui/BoxComponent";
 import ButtonComponent from "./ui/ButtonComponnt";
 import Days from "./ui/Days";
 
-const today = new Date();
-const months = [
+export const today = new Date();
+export const months = [
   "Styczeń",
   "Luty",
   "Marzec",
@@ -22,28 +22,20 @@ const months = [
   "Grudzień",
 ];
 
-const Callendar = () => {
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
-  const [currentYear, setCurrentYear] = useState(today.getFullYear());
+type CallendarProps = {
+  onModalOpen: () => void;
+  onSwitchMonthClick: (next?: boolean) => void;
+  currentYear: number;
+  currentMonth: number;
+};
 
+const Callendar: FC<CallendarProps> = ({
+  onModalOpen,
+  onSwitchMonthClick,
+  currentMonth,
+  currentYear,
+}) => {
   const daysInMonth = getCalendarDays(currentYear, currentMonth);
-
-  const handleSwitchMonthClick = (next?: boolean) => {
-    setCurrentMonth((prev) => {
-      const increment = next ? 1 : -1;
-      if (shouldChangeYear(prev + increment)) {
-        if (next) {
-          setCurrentYear((prev) => prev + 1);
-          return 1;
-        } else {
-          setCurrentYear((prev) => prev - 1);
-          return 11;
-        }
-      }
-
-      return prev + increment;
-    });
-  };
 
   return (
     <BoxComponent paddingClass="">
@@ -55,14 +47,14 @@ const Callendar = () => {
         >
           <View className="flex flex-row">
             <View className={"inline-flex flex-row align-middle gap-2"}>
-              <ButtonComponent onClick={() => handleSwitchMonthClick(false)}>
+              <ButtonComponent onClick={() => onSwitchMonthClick(false)}>
                 <ArrowImage isLeft={true} />
               </ButtonComponent>
-              <ButtonComponent onClick={() => handleSwitchMonthClick(true)}>
+              <ButtonComponent onClick={() => onSwitchMonthClick(true)}>
                 <ArrowImage isLeft={false} />
               </ButtonComponent>
             </View>
-            <Pressable className="ml-3 inline-block">
+            <Pressable onPress={onModalOpen} className="ml-3 inline-block">
               <Text
                 style={{ backgroundColor: "#465fff" }}
                 className="rounded-lg inline-block text-white text-center py-2 px-3 font-outfit text-base"
