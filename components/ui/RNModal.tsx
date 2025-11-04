@@ -21,10 +21,11 @@ const RNModal: FC<RNModalProps> = ({
           "fixed inset-0 flex items-center justify-center h-screen z-50"
         }
       >
-        <View
+        <Pressable
           className={
             "fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[32px]"
           }
+          onPress={onClose}
         />
         <View className={"p-4 absolute w-full"}>
           <View
