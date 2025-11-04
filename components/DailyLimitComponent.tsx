@@ -10,7 +10,7 @@ const DailyLimitComponent = () => {
   const limitLeft = formatCurrency(700);
 
   return (
-    <BoxComponent customClassName="rounded-2xl border border-gray-200 bg-gray-100 dark:border-gray-800 dark:bg-white/[0.03]">
+    <BoxComponent paddingClass="" bgClass="bg-gray-100 dark:bg-white/[0.03]">
       <View className={"flex flex-col"}>
         <View
           className={

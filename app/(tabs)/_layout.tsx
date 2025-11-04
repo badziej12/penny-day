@@ -21,6 +21,15 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="callendar"
+        options={{
+          title: "Callendar",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="calendar" color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

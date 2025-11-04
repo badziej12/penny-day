@@ -6,11 +6,7 @@ import TableHead from "./ui/TableHead";
 
 const LatestTransactions = () => {
   return (
-    <BoxComponent
-      customClassName={
-        "rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
-      }
-    >
+    <BoxComponent paddingClass="">
       <View className={"px-4 pt-4"}>
         <View className={"flex flex-col gap-2 mb-4"}>
           <Text
