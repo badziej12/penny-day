@@ -1,37 +1,18 @@
-import Callendar, { today } from "@/components/Callendar";
+import Callendar from "@/components/Callendar";
 import MonthModal, { MonthModalRef } from "@/components/MonthModal";
 import CloseButton from "@/components/ui/CloseButton";
 import RNModal from "@/components/ui/RNModal";
-import { useBudgetStorage } from "@/hooks/use-budget-storage";
-import { shouldChangeYear } from "@/utils/utils";
-import { useRef, useState } from "react";
+import { useBudgetStorage } from "@/context/BudgetStorageContext";
+import { DateContext, getMonthKey } from "@/context/DateContext";
+import { useContext, useRef, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
 export default function CallendarScreen() {
   const [monthModalVisible, setMonthModalVisible] = useState(false);
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
-  const [currentYear, setCurrentYear] = useState(today.getFullYear());
-
-  const { setMonthlyBudget, monthlyBudgets } = useBudgetStorage();
+  const { selectedDate } = useContext(DateContext);
+  const { setMonthlyBudget } = useBudgetStorage();
 
   const monthModalRef = useRef<MonthModalRef>(null);
-
-  const handleSwitchMonthClick = (next?: boolean) => {
-    setCurrentMonth((prev) => {
-      const increment = next ? 1 : -1;
-      if (shouldChangeYear(prev + increment)) {
-        if (next) {
-          setCurrentYear((prev) => prev + 1);
-          return 1;
-        } else {
-          setCurrentYear((prev) => prev - 1);
-          return 11;
-        }
-      }
-
-      return prev + increment;
-    });
-  };
 
   const handleMonthModalOpen = () => {
     setMonthModalVisible(true);
@@ -48,7 +29,7 @@ export default function CallendarScreen() {
 
     try {
       const floatValue = parseFloat(value);
-      const monthKey = `${currentYear}-${currentMonth + 1}`;
+      const monthKey = getMonthKey(selectedDate);
 
       setMonthlyBudget(monthKey, floatValue);
       handleMonthModalClose();
@@ -61,12 +42,7 @@ export default function CallendarScreen() {
     <>
       <ScrollView className={"p-4 pb-20 bg-gray-50 dark:bg-gray-900 pt-20"}>
         <View className={"flex flex-col gap-8"}>
-          <Callendar
-            onModalOpen={handleMonthModalOpen}
-            onSwitchMonthClick={handleSwitchMonthClick}
-            currentMonth={currentMonth}
-            currentYear={currentYear}
-          />
+          <Callendar onModalOpen={handleMonthModalOpen} />
         </View>
       </ScrollView>
       <RNModal visible={false}>
