@@ -1,9 +1,9 @@
-import { getCalendarDays } from "@/utils/utils";
-import { FC } from "react";
+import { DateContext } from "@/context/DateContext";
+import { FC, useContext } from "react";
 import { Pressable, Text, View } from "react-native";
 import ArrowImage from "./ui/ArrowImage";
 import BoxComponent from "./ui/BoxComponent";
-import ButtonComponent from "./ui/ButtonComponnt";
+import ButtonComponent from "./ui/ButtonComponent";
 import Days from "./ui/Days";
 
 export const today = new Date();
@@ -24,18 +24,10 @@ export const months = [
 
 type CallendarProps = {
   onModalOpen: () => void;
-  onSwitchMonthClick: (next?: boolean) => void;
-  currentYear: number;
-  currentMonth: number;
 };
 
-const Callendar: FC<CallendarProps> = ({
-  onModalOpen,
-  onSwitchMonthClick,
-  currentMonth,
-  currentYear,
-}) => {
-  const daysInMonth = getCalendarDays(currentYear, currentMonth);
+const Callendar: FC<CallendarProps> = ({ onModalOpen }) => {
+  const { nextMonth, prevMonth, month, year } = useContext(DateContext);
 
   return (
     <BoxComponent paddingClass="">
@@ -47,10 +39,10 @@ const Callendar: FC<CallendarProps> = ({
         >
           <View className="flex flex-row">
             <View className={"inline-flex flex-row align-middle gap-2"}>
-              <ButtonComponent onClick={() => onSwitchMonthClick(false)}>
+              <ButtonComponent onClick={prevMonth}>
                 <ArrowImage isLeft={true} />
               </ButtonComponent>
-              <ButtonComponent onClick={() => onSwitchMonthClick(true)}>
+              <ButtonComponent onClick={nextMonth}>
                 <ArrowImage isLeft={false} />
               </ButtonComponent>
             </View>
@@ -69,11 +61,11 @@ const Callendar: FC<CallendarProps> = ({
                 "text-lg font-outfit-medium text-gray-800 dark:text-white/[0.9]"
               }
             >
-              {months[currentMonth]} {currentYear}
+              {months[month]} {year}
             </Text>
           </View>
         </View>
-        <Days days={daysInMonth} />
+        <Days />
       </View>
     </BoxComponent>
   );

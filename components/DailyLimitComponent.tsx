@@ -1,4 +1,6 @@
-import { formatCurrency } from "@/utils/utils";
+import { useBudgetStorage } from "@/context/BudgetStorageContext";
+import { DateContext } from "@/context/DateContext";
+import { useContext } from "react";
 import { Text, View } from "react-native";
 import BoxComponent from "./ui/BoxComponent";
 import LabeledValue from "./ui/LabeledValue";
@@ -6,8 +8,20 @@ import ProgressArc from "./ui/ProgressArc";
 import Separator from "./ui/Separator";
 
 const DailyLimitComponent = () => {
+  const { currentMonthKey, daysInMonth, currentDayKey, today } =
+    useContext(DateContext);
+  const { monthlyBudgets, dailyBudgets } = useBudgetStorage();
+
+  let dailyLimit = 0;
+  if (dailyBudgets[currentDayKey]) {
+    dailyLimit = dailyBudgets[currentDayKey];
+  } else if (monthlyBudgets[currentMonthKey]) {
+    const divider = daysInMonth.length - today.getDate();
+
+    dailyLimit = monthlyBudgets[currentMonthKey] / divider;
+  }
+
   const percent = 60;
-  const limitLeft = formatCurrency(700);
 
   return (
     <BoxComponent paddingClass="" bgClass="bg-gray-100 dark:bg-white/[0.03]">
@@ -32,7 +46,7 @@ const DailyLimitComponent = () => {
             </View>
           </View>
           <ProgressArc
-            heading={limitLeft}
+            limitLeft={dailyLimit}
             subheading={"+12%"}
             progress={percent}
           />
@@ -49,11 +63,14 @@ const DailyLimitComponent = () => {
             "flex flex-row items-center justify-center justify-items-center gap-5 px-6 py-3.5"
           }
         >
-          <LabeledValue label="Limit" value={80} />
+          <LabeledValue label="Limit" value={dailyLimit} />
           <Separator />
           <LabeledValue label="Wydano" value={20} />
           <Separator />
-          <LabeledValue label="Ogólnie" value={2000} />
+          <LabeledValue
+            label="Ogólnie"
+            value={monthlyBudgets[currentMonthKey]}
+          />
         </View>
       </View>
     </BoxComponent>

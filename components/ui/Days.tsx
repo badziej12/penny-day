@@ -1,15 +1,13 @@
-import { FC } from "react";
+import { DateContext } from "@/context/DateContext";
+import { getCalendarDays } from "@/utils/utils";
+import { useContext } from "react";
 import { Text, View } from "react-native";
 
 const weekDays = ["Pon", "Wt", "Śr", "Czw", "Pt", "Sob", "N"];
 
-type DaysProps = {
-  days: { date: Date; isCurrentMonth: boolean }[];
-};
-
-const Days: FC<DaysProps> = ({ days }) => {
-  const daysInMonth = days;
-  const today = new Date();
+const Days = () => {
+  const { today, month, year } = useContext(DateContext);
+  const calendarMonthDays = getCalendarDays(year, month);
 
   return (
     <View>
@@ -32,7 +30,7 @@ const Days: FC<DaysProps> = ({ days }) => {
       </View>
       <View className={"border-hidden"}>
         <View className="flex flex-row flex-wrap">
-          {daysInMonth.map((day, index) => {
+          {calendarMonthDays.map((day, index) => {
             const isToday =
               day.isCurrentMonth && today.getDate() === day.date.getDate();
 

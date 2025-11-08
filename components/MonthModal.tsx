@@ -5,7 +5,7 @@ export type MonthModalRef = {
   getValue: () => string;
 };
 
-const MonthModal = forwardRef<MonthModalRef>(({}, ref) => {
+const MonthModal = forwardRef<MonthModalRef>((props, ref) => {
   const [amount, setAmount] = useState("");
 
   useImperativeHandle(ref, () => ({
