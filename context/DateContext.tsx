@@ -1,3 +1,4 @@
+import { calcDaysInMonth } from "@/utils/utils";
 import { createContext, FC, ReactNode, useMemo, useState } from "react";
 
 export const getMonthKey = (date: Date) =>
@@ -67,17 +68,10 @@ export const DateProvider: FC<DateProviderProps> = ({ children }) => {
     setSelectedDate(new Date(newYear, newMonth, 1));
   };
 
-  const daysInMonth = useMemo(() => {
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0); // 0 → ostatni dzień poprzedniego miesiąca
-    const days: Date[] = [];
-
-    for (let d = firstDay.getDate(); d <= lastDay.getDate(); d++) {
-      days.push(new Date(year, month, d));
-    }
-
-    return days;
-  }, [month, year]);
+  const daysInMonth = useMemo(
+    () => calcDaysInMonth(year, month),
+    [month, year]
+  );
 
   const value = {
     today,

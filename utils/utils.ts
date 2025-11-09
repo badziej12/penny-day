@@ -55,3 +55,15 @@ export const shouldChangeYear = (currentMonth: number) => {
 
   return false;
 };
+
+export const calcDaysInMonth = (year: number, month: number) => {
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0); // 0 → ostatni dzień poprzedniego miesiąca
+  const days: Date[] = [];
+
+  for (let d = firstDay.getDate(); d <= lastDay.getDate(); d++) {
+    days.push(new Date(year, month, d));
+  }
+
+  return days;
+};
